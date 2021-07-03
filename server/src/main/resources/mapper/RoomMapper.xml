@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.issunjh.ClassManagement.dao.RoomMapper">
+    <select id="getAllRooms" resultType="com.issunjh.ClassManagement.bean.Room">
+        select * from class_management.t_room
+    </select>
+</mapper>

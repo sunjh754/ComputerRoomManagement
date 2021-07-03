@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.issunjh.ClassManagement.dao.ClassUseMapper">
+
+    <insert id="addClassUse">
+        insert into t_classuse SET rid=#{rid},tid=#{tid},beginTime=#{beginTime},
+                                   endTime=#{endTime},dayTime=#{dayTime},state=#{state}
+    </insert>
+    <update id="updateById">
+        UPDATE t_classuse SET state = '2' WHERE id=#{id,jdbcType=INTEGER};
+    </update>
+    <update id="refuseById">
+        UPDATE t_classuse SET state = '0' WHERE id=#{id,jdbcType=INTEGER};
+    </update>
+
+    <select id="selectClassState" resultType="java.lang.Integer">
+        SELECT state FROM t_classuse
+        WHERE t_classuse.rid=#{rid,jdbcType=INTEGER}
+        AND t_classuse.dayTime=#{dayTime,jdbcType=DATE}
+        AND t_classuse.`beginTime` BETWEEN #{beginTime,jdbcType=TIME} AND #{endTime,jdbcType=TIME}
+        And t_classuse.`endTime` BETWEEN #{beginTime,jdbcType=TIME} AND #{endTime,jdbcType=TIME}
+        ORDER BY t_classuse.id DESC
+    </select>
+    <select id="displayAll" resultType="com.issunjh.ClassManagement.bean.ClassUse">
+        SELECT t_classuse.id,roomName,rid,tid,teacherName,beginTime,endTime,dayTime as day,t_classuse.state
+        FROM t_classuse LEFT JOIN t_room
+                                  ON t_classuse.`rid`=t_room.`id`
+                        LEFT JOIN t_teacher
+                                  ON t_classuse.`tid`=t_teacher.`id`
+        order by t_classuse.id DESC
+    </select>
+    <select id="selectStateById" resultType="com.issunjh.ClassManagement.bean.ClassUse">
+        select t_classuse.state from t_classuse where id=#{id,jdbcType=INTEGER}
+    </select>
+    <select id="displayUse" resultType="com.issunjh.ClassManagement.bean.ClassUse">
+        SELECT t_classuse.id,roomName,rid,tid,teacherName,beginTime,endTime,dayTime as day,t_classuse.state
+        FROM t_classuse LEFT JOIN t_room
+                                  ON t_classuse.`rid`=t_room.`id`
+                        LEFT JOIN t_teacher
+                                  ON t_classuse.`tid`=t_teacher.`id`
+        where t_classuse.state!='0'
+    </select>
+</mapper>
